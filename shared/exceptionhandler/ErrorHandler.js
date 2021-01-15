@@ -1,4 +1,4 @@
-import { ERROR_RESPONSE } from "./GatewayConstants";
+import { ERROR_RESPONSE } from "../GatewayConstants";
 
 const throwBadRequestError = (res, body) => {
   return res.status(400).send(body
