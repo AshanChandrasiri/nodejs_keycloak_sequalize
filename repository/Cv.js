@@ -6,13 +6,17 @@ const Cv = () => {
       type: db.Sequelize.STRING,
       field: "firebase_url",
     },
-    userId: {
+    user: {
       type: db.Sequelize.STRING,
       field: "user_id",
     },
   });
 
-  cv.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id", onDelete: 'cascade' });
+  cv.belongsTo(db.User, {
+    foreignKey: "user_id",
+    targetKey: "id",
+    onDelete: "cascade",
+  });
 
   return cv;
 };

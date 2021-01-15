@@ -1,7 +1,7 @@
 import {
   throwBadRequestError,
   throwForbiddenRequestError,
-} from "../shared/ErrorHandler";
+} from "../shared/exceptionhandler/ErrorHandler";
 
 const authorize = (roles) => {
   return (req, res, next) => {

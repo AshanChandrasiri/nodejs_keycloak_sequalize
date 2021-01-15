@@ -1,10 +1,7 @@
 import db from "../../repository/DBContext";
 import { TOKEN_ATTRBUTES } from "../../shared/constants";
-import {
-  throwBadRequestError,
-  throwInternalServerErrorRequestError,
-  throwNotFoundRequestError,
-} from "../../shared/ErrorHandler";
+import { BadRequestException } from "../../shared/exceptionhandler/BadRequestException";
+import { NotFoundException } from "../../shared/exceptionhandler/NotFoundException";
 import { getAttributesFromToken } from "../../shared/utils/utils";
 import MailService from "../mail/MailService";
 
@@ -18,7 +15,7 @@ const createUser = async (req, res) => {
   });
 
   if (checkByUsername) {
-    return throwBadRequestError(res, { message: "username already exists" });
+    throw new BadRequestException("username already exists");
   }
 
   const checkByEmail = await userRepository.findOne({
@@ -26,7 +23,7 @@ const createUser = async (req, res) => {
   });
 
   if (checkByEmail) {
-    return throwBadRequestError(res, { message: "email already exists" });
+    throw new BadRequestException("email already exists");
   }
 
   const { username, email, firstName, lastName, dob } = requestBody;
@@ -43,7 +40,7 @@ const createUser = async (req, res) => {
 
   await MailService.sendAccountActivationMail(result);
 
-  return res.status(200).send(result);
+  return result;
 };
 
 const getCurrentUser = async (req, res) => {
@@ -53,7 +50,7 @@ const getCurrentUser = async (req, res) => {
     const username = getAttributesFromToken(req, TOKEN_ATTRBUTES.USERNAME);
 
     if (!username) {
-      return throwBadRequestError(res, { message: "username not found" });
+      throw new BadRequestException("username not found");
     }
 
     const checkByUsername = await userRepository.findOne({
@@ -61,15 +58,12 @@ const getCurrentUser = async (req, res) => {
     });
 
     if (!checkByUsername) {
-      return throwNotFoundRequestError(res, {
-        message: "cannot find record for user in db",
-      });
+      throw new NotFoundException("cannot find record for user in db");
     }
-
-    return res.status(200).send(checkByUsername);
+    return checkByUsername;
   } catch (error) {
     console.log(error);
-    return throwInternalServerErrorRequestError(res);
+    throw error;
   }
 };
 
