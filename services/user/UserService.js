@@ -6,7 +6,7 @@ import {
   throwNotFoundRequestError,
 } from "../../shared/ErrorHandler";
 import { getAttributesFromToken } from "../../shared/utils/utils";
-import MailService from "../MailService";
+import MailService from "../mail/MailService";
 
 const createUser = async (req, res) => {
   const userRepository = db.User;
@@ -29,12 +29,14 @@ const createUser = async (req, res) => {
     return throwBadRequestError(res, { message: "email already exists" });
   }
 
+  const { username, email, firstName, lastName, dob } = requestBody;
+
   const user = {
-    username: requestBody.username,
-    email: requestBody.email,
-    firstName: requestBody.firstName,
-    lastName: requestBody.lastName,
-    dob: requestBody.dob,
+    username,
+    email,
+    firstName,
+    lastName,
+    dob,
   };
 
   const result = await userRepository.create(user);
