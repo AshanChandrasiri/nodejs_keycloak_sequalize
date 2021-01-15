@@ -7,7 +7,7 @@ const APPLICATION_HTML_HEADER = {
 };
 const ERROR_RESPONSE = {
   BAD_REQUEST: {
-    statusCode: "404",
+    statusCode: "400",
     body: JSON.stringify({
       message: "bad request",
     }),
@@ -21,6 +21,23 @@ const ERROR_RESPONSE = {
     }),
     headers: APPLICATION_JSON_HEADER,
   },
+
+  NOT_FOUND: {
+    statusCode: "404",
+    body: JSON.stringify({
+      message: "not found",
+    }),
+    headers: APPLICATION_JSON_HEADER,
+  },
+
+  INTERNAL_SERVER_ERROR: {
+    statusCode: "500",
+    body: JSON.stringify({
+      message: "internal server error",
+    }),
+    headers: APPLICATION_JSON_HEADER,
+  },
+
 };
 
 export { ERROR_RESPONSE };

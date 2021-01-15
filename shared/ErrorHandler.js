@@ -12,4 +12,16 @@ const throwForbiddenRequestError = (res, body) => {
     : ERROR_RESPONSE.FORBIDDEN);
 };
 
-export { throwBadRequestError, throwForbiddenRequestError };
+const throwNotFoundRequestError = (res, body) => {
+  return res.status(404).send(body
+    ? { ...ERROR_RESPONSE.NOT_FOUND, body: JSON.stringify(body) }
+    : ERROR_RESPONSE.NOT_FOUND);
+};
+
+const throwInternalServerErrorRequestError = (res, body) => {
+  return res.status(500).send(body
+    ? { ...ERROR_RESPONSE.INTERNAL_SERVER_ERROR, body: JSON.stringify(body) }
+    : ERROR_RESPONSE.INTERNAL_SERVER_ERROR);
+};
+
+export { throwBadRequestError, throwForbiddenRequestError, throwNotFoundRequestError, throwInternalServerErrorRequestError };

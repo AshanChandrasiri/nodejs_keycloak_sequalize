@@ -12,7 +12,7 @@ const Cv = () => {
     },
   });
 
-  cv.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id" });
+  cv.belongsTo(db.User, { foreignKey: "user_id", targetKey: "id", onDelete: 'cascade' });
 
   return cv;
 };
