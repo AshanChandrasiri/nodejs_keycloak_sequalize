@@ -60,7 +60,18 @@ const getCurrentUser = async (req, res) => {
     if (!checkByUsername) {
       throw new NotFoundException("cannot find record for user in db");
     }
-    return checkByUsername;
+
+    const roles = getAttributesFromToken(req, TOKEN_ATTRBUTES.CUSTOM_ROLES);
+
+    const response = {
+      ...(checkByUsername || {}).dataValues,
+      profilePic: checkByUsername.profilePic,
+      roles:
+        roles?.length > 0 ? roles.filter((item) => item.includes("ROLE_")) : [],
+    };
+
+    console.log(response);
+    return response;
   } catch (error) {
     console.log(error);
     throw error;
