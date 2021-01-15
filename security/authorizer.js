@@ -18,7 +18,7 @@ const authorize = (roles) => {
       }
     } catch (error) {
       return throwBadRequestError(res, {
-        message: "cannot find valid token in the headers",
+        message: "token decode error. invalid token",
       });
     }
 
