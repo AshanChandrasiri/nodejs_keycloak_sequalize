@@ -1,7 +1,12 @@
 import db from "../../repository/DBContext";
 import { TOKEN_ATTRBUTES } from "../../shared/constants";
-import { throwBadRequestError, throwInternalServerErrorRequestError, throwNotFoundRequestError } from "../../shared/ErrorHandler";
+import {
+  throwBadRequestError,
+  throwInternalServerErrorRequestError,
+  throwNotFoundRequestError,
+} from "../../shared/ErrorHandler";
 import { getAttributesFromToken } from "../../shared/utils/utils";
+import MailService from "../MailService";
 
 const createUser = async (req, res) => {
   const userRepository = db.User;
@@ -34,18 +39,19 @@ const createUser = async (req, res) => {
 
   const result = await userRepository.create(user);
 
+  await MailService.sendAccountActivationMail(result);
+
   return res.status(200).send(result);
 };
 
 const getCurrentUser = async (req, res) => {
-
   const userRepository = db.User;
 
   try {
     const username = getAttributesFromToken(req, TOKEN_ATTRBUTES.USERNAME);
 
     if (!username) {
-        return throwBadRequestError(res, { message: "username not found" });
+      return throwBadRequestError(res, { message: "username not found" });
     }
 
     const checkByUsername = await userRepository.findOne({
@@ -53,11 +59,12 @@ const getCurrentUser = async (req, res) => {
     });
 
     if (!checkByUsername) {
-      return throwNotFoundRequestError(res, { message: "cannot find record for user in db" });
+      return throwNotFoundRequestError(res, {
+        message: "cannot find record for user in db",
+      });
     }
 
     return res.status(200).send(checkByUsername);
-
   } catch (error) {
     console.log(error);
     return throwInternalServerErrorRequestError(res);
