@@ -65,12 +65,11 @@ const getCurrentUser = async (req, res) => {
 
     const response = {
       ...(checkByUsername || {}).dataValues,
-      profilePic: checkByUsername.profilePic,
+      profilePic: checkByUsername?.profilePic,
       roles:
         roles?.length > 0 ? roles.filter((item) => item.includes("ROLE_")) : [],
     };
 
-    console.log(response);
     return response;
   } catch (error) {
     console.log(error);
@@ -78,9 +77,17 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+const findById = async (id) => {
+  const userRepository = db.User;
+  return await userRepository.findOne({
+    where: { username: username },
+  });
+};
+
 const UserService = {
   getCurrentUser,
   createUser,
+  findById,
 };
 
 export { UserService };
