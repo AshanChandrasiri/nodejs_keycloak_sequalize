@@ -9,6 +9,8 @@ import {
 import Sequelize from "sequelize";
 import { User } from "./User";
 import { Cv } from "./Cv";
+import { University } from "./University";
+import { UserUniversity } from "./UserUniversity";
 
 const sequelize = new Sequelize(DB, USER, PASSWORD, {
   host: HOST,
@@ -40,6 +42,8 @@ const connect = async () => {
 const syncDB = (args) => {
   db.User = User();
   db.cv = Cv();
+  db.University = University();
+  db.UserUniversity = UserUniversity();
 
   db.sequelize.sync(args);
 };
